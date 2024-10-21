@@ -1,1 +1,66 @@
-print("hej")
+user_password = {} 
+quiz_dict = {"spanska":{"hej":"hola", "gul":"amarillo"}, "engelska": {"blå": "blue", "grön":"green"}}
+
+
+def practice_quiz(lista):
+    for i in lista:
+        svar = input(f'{i} = ')
+        rätt_svar = lista[i]
+        if svar == rätt_svar:
+            print("Rätt svar!")
+        else:
+            print(f'Fel svar! Rätt svar: {rätt_svar}')
+
+def create_quiz(quizzes, title):
+    if title not in quizzes:
+        quizzes[title] = {}
+    while True:
+        word = input("Word: ")
+        answer = input("Answer: ")
+        quizzes[title][word] = answer
+        quit = input("Finished? y/n: ")
+        if quit == "y":
+            break
+    return quizzes
+    
+def quiz_option(quizzes):
+    print("Skapa quiz eller lägga till i befintligt: ")
+    title = input("Title: ")
+    if title in quiz_dict:
+        print("Quizzet finns redan")
+        return title
+#Lägg till i bef 
+    else:
+        quizzes[title] = {}
+    return title
+
+
+    
+def menu(x):
+    pass
+
+def view_quizzes(quizzes):
+    pass
+
+def login(users):
+    pass
+
+def create_account(users):
+    pass
+
+
+#title = input("Title: ")
+#   if title in quiz_dict:
+#       
+#    else:
+#        quizzes[title] = {}
+
+
+
+
+#print(quizzes["spanska"]["gul"])
+
+
+
+#practice_quiz(quizzes["spanska"])
+create_quiz(quiz_dict)
