@@ -29,11 +29,14 @@ def quiz_option(quizzes):
     if title in quiz_dict:
         print("Quizzet finns redan")
         return title
-#Lägg till i bef 
+#Lägg till i befintlig lista  
     else:
         quizzes[title] = {}
     return title
 
+def add(quizzes, title):
+    title = quiz_option(quiz_dict)
+    input("vill du lägga till i ")
 
     
 def menu(x):
