@@ -1,15 +1,21 @@
-user_password = {"tenta":"måskit", "crispin":"hej"} 
+user_password = {"crispin":"dumtenta", "LarsÅke":"basmatte"} 
 quiz_dict = {"spanska":{"hej":"hola", "gul":"amarillo"}, "engelska": {"blå": "blue", "grön":"green"}}
+user_points = {"crispin": 0, "LarsÅke": 0}
 
+def splash(quizzes):
+    print("--------------------------------------\n")
+    print("\tWelcome to Flashbook")
 
-def practice_quiz(lista):
-    for i in lista:
+def practice_quiz(user, quiz, points):
+    for i in quiz:
         svar = input(f'{i} = ')
-        rätt_svar = lista[i]
+        rätt_svar = quiz[i]
         if svar == rätt_svar:
-            print("Rätt svar!")
+            print("Correct answer!")
+            points[user]+1 
         else:
-            print(f'Fel svar! Rätt svar: {rätt_svar}')
+            print(f'Wrong answer! Correct answer: {rätt_svar}')
+    return points
 
 def create_quiz(quizzes, title):
     if title not in quizzes:
@@ -24,30 +30,78 @@ def create_quiz(quizzes, title):
     return quizzes
     
 def quiz_option(quizzes):
-    print("Skapa quiz eller lägga till i befintligt: ")
+    print("Write the title of a new or existing quiz")
     title = input("Title: ")
     return title  
     
 
 def menu(x):
     if x == 1:
-        print("\n")
+        print("\nl) Login \n c) Create new account \n q) Quit ")
+    if x == 2:
+        print("\nr) Retry \n q) Quit \n")
+    if x == 3:
+        print("\n p) Practise flashcards \n c) Create new flashcards")
+    choice = input("\nOption: ").lower()
+    return choice
+    
 
 def view_quizzes(quizzes):
-    for key in quizzes:
-        print("")
+    print("These are your quizzes:")
+    for keys in quizzes:
+        print(keys)
 
 def login(user_pswrd):
     while True:
-            user = input("Användarnamn: ")
-            password = input("Lösenord: ")
-            if user not in user_pswrd or password  != user_pswrd[user]:
-                pass
+        user = input("Username: ").lower
+        password = input("Password: ").lower
+        if user not in user_pswrd or password  != user_pswrd[user]:
+            print("Fel lösenord")
+            menu(2)
+            retry=input("r/q: ").lower
+            if retry == "q":
+                print("quitting.....")
+                return retry
+                break
+            else:
+                return user
 
-def create_account(users):
+def create_account(user, user_d, user_p):
+    print("New user:")
+    n_user_name = input("Username: ")
+    n_user_pswrd = input("Password: ")
+    user_d[n_user_name] = n_user_pswrd
+    user_p[n_user_name] = 0
+    print("ny dict", user_d)
+    return user_d, user_p
+    
+    
+    
+def leaderboard():
     pass
 
-def main():
+def user_actions(user, quizzes, user_points):
+    pass
+ 
+def main(users, quizzes, user_points):
+    splash()
+    while True:
+        choice = menu(1)
+        if choice == "q":
+            break
+        elif choice == "l":
+            user = login(users)
+            if user == "q":
+                break
+            user_actions(user, quizzes, user_points)
+        elif choice == "c":
+            users = create_account(users)
+            continue
+    
+        
+
+
+    pass
     #lägg till i quiz bweoende på title
 
 
@@ -57,18 +111,18 @@ def main():
 #    else:
 #        quizzes[title] = {}
 
-'''def add(quizzes, title):
-        title = quiz_option(quiz_dict)
-        choice = input("Vill du lägga till i befintiligt quiz? (y/n): ")
-        if choice == "y":'''
+#def add(quizzes, title):
+#        title = quiz_option(quiz_dict)
+#        choice = input("Vill du lägga till i befintiligt quiz? (y/n): ")
+#        if choice == "y":
 
 #       quiz_dict[title].append
 
 
-
+view_quizzes(quiz_dict)
 #print(quizzes["spanska"]["gul"])
 
 
 
 #practice_quiz(quizzes["spanska"])
-create_quiz(quiz_dict, user_password)
+#create_quiz(quiz_dict, user_password)
