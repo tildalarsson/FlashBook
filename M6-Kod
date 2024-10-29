@@ -26,30 +26,25 @@ def create_quiz(quizzes, title):
 def quiz_option(quizzes):
     print("Skapa quiz eller lägga till i befintligt: ")
     title = input("Title: ")
-    if title in quiz_dict:
-        print("Quizzet finns redan")
-        return title
-#Lägg till i befintlig lista  
-    else:
-        quizzes[title] = {}
-    return title
-
-def add(quizzes, title):
-    title = quiz_option(quiz_dict)
-    input("vill du lägga till i ")
-
+    return title  
     
+
 def menu(x):
-    pass
+    if x == 1:
+        print("\n")
 
 def view_quizzes(quizzes):
-    pass
+    for key in quizzes:
+        print("")
 
 def login(users):
     pass
 
 def create_account(users):
     pass
+
+def main():
+    #lägg till i quiz bweoende på title
 
 
 #title = input("Title: ")
@@ -58,6 +53,12 @@ def create_account(users):
 #    else:
 #        quizzes[title] = {}
 
+'''def add(quizzes, title):
+    title = quiz_option(quiz_dict)
+    choice = input("Vill du lägga till i befintiligt quiz? (y/n): ")
+    if choice == "y":'''
+
+#       quiz_dict[title].append
 
 
 
