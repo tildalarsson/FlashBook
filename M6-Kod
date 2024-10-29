@@ -1,4 +1,4 @@
-user_password = {} 
+user_password = {"tenta":"måskit", "crispin":"hej"} 
 quiz_dict = {"spanska":{"hej":"hola", "gul":"amarillo"}, "engelska": {"blå": "blue", "grön":"green"}}
 
 
@@ -37,8 +37,12 @@ def view_quizzes(quizzes):
     for key in quizzes:
         print("")
 
-def login(users):
-    pass
+def login(user_pswrd):
+    while True:
+            user = input("Användarnamn: ")
+            password = input("Lösenord: ")
+            if user not in user_pswrd or password  != user_pswrd[user]:
+                pass
 
 def create_account(users):
     pass
@@ -54,9 +58,9 @@ def main():
 #        quizzes[title] = {}
 
 '''def add(quizzes, title):
-    title = quiz_option(quiz_dict)
-    choice = input("Vill du lägga till i befintiligt quiz? (y/n): ")
-    if choice == "y":'''
+        title = quiz_option(quiz_dict)
+        choice = input("Vill du lägga till i befintiligt quiz? (y/n): ")
+        if choice == "y":'''
 
 #       quiz_dict[title].append
 
@@ -67,4 +71,4 @@ def main():
 
 
 #practice_quiz(quizzes["spanska"])
-create_quiz(quiz_dict)
+create_quiz(quiz_dict, user_password)
