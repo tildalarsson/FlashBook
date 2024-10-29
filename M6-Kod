@@ -3,26 +3,31 @@
 
 import json
 
-user_password = {"sofia":"blomstrand", "tilda":"larsson"} 
-quiz_dict = {"spanska":{"hej":"hola", "gul":"amarillo"}, "engelska": {"blå": "blue", "grön":"green"}}
-user_points = {"sofia": 0, "tilda": 0}
-
-def save_data(users, quizzes, points):
-    data = [users, quizzes, points]
-    with open("FlashBook", 'w') as h:
-        json.dump(data, h)
-
-def open_data():
-    with open("FlashBook", "r") as file:
-        data = json.load(file)
-    users = data[0]
-    quizzes = data[1]
-    points = data[2]
-    return users, quizzes, points
+#user_password = {"sofia":"blomstrand", "tilda":"larsson"} 
+#quiz_dict = {"spanska":{"hej":"hola", "gul":"amarillo"}, "engelska": {"blå": "blue", "grön":"green"}}
+#user_points = {"sofia": 0, "tilda": 0}
 
 def splash():
     print("-----------------------------------\n")
     print("\tWelcome to Flashbook")
+
+
+def menu(x):
+    if x == 1:
+        print("\nl) Login \nc) Create new account \nq) Quit")
+    if x == 2:
+        print("\nr) Retry \nq) Quit")
+    if x == 3:
+        print("\np) Practise flashcards \nc) Create new flashcards \nl) Log out")
+    choice = input("\nOption: ").lower()
+    return choice
+
+
+def view_quizzes(quizzes):
+    print("\nThese are your quizzes:\n")
+    for keys in quizzes:
+        print(keys)
+
 
 def practice_quiz(quiz, user, points):
     n = 0 # point counter
@@ -40,6 +45,15 @@ def practice_quiz(quiz, user, points):
     points[user] = points[user] + n # lägger till samlade poäng i totala poäng
     return points
 
+
+def quiz_option(quizzes):
+    print("Your quizzes are: ")
+    view_quizzes(quizzes)
+    print("\nWrite the title of a new or existing quiz")
+    title = input("\nTitle: ")
+    return title  
+
+
 def create_quiz(quizzes, title):
     if title not in quizzes:
         quizzes[title] = {}
@@ -52,27 +66,6 @@ def create_quiz(quizzes, title):
             break
     return quizzes
     
-def quiz_option(quizzes):
-    print("Your quizzes are: ")
-    view_quizzes(quizzes)
-    print("\nWrite the title of a new or existing quiz")
-    title = input("\nTitle: ")
-    return title  
-
-def menu(x):
-    if x == 1:
-        print("\nl) Login \nc) Create new account \nq) Quit")
-    if x == 2:
-        print("\nr) Retry \nq) Quit")
-    if x == 3:
-        print("\np) Practise flashcards \nc) Create new flashcards \nl) Log out")
-    choice = input("\nOption: ").lower()
-    return choice
-    
-def view_quizzes(quizzes):
-    print("\nThese are your quizzes:\n")
-    for keys in quizzes:
-        print(keys)
 
 def login(user_pswrd):
     while True:
@@ -106,6 +99,20 @@ def leaderboard(user_points):
         n = n + 1
 
 
+def save_data(users, quizzes, points):
+    data = [users, quizzes, points]
+    with open("FlashBook", 'w') as h:
+        json.dump(data, h)
+
+def open_data():
+    with open("FlashBook", "r") as file:
+        data = json.load(file)
+    users = data[0]
+    quizzes = data[1]
+    points = data[2]
+    return users, quizzes, points
+
+
 def user_actions(user, quizzes, points):
     print(f"\nWelcome {user}!\n")
     leaderboard(points)
@@ -121,6 +128,7 @@ def user_actions(user, quizzes, points):
             quizzes = create_quiz(quizzes, title)
         elif choice == "l":
             break
+
 
 def main():
     users, quizzes, points = open_data()
@@ -138,5 +146,6 @@ def main():
             users, points = create_account(users, points)
             continue
     save_data(users, quizzes, points)
+
 
 main()
