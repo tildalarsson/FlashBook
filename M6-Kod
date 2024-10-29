@@ -12,6 +12,12 @@ def splash():
     print("\tWelcome to Flashbook")
 
 
+def view_quizzes(quizzes):
+    print("\nThese are your quizzes:\n")
+    for keys in quizzes:
+        print(keys)
+
+
 def menu(x):
     if x == 1:
         print("\nl) Login \nc) Create new account \nq) Quit")
@@ -23,14 +29,9 @@ def menu(x):
     return choice
 
 
-def view_quizzes(quizzes):
-    print("\nThese are your quizzes:\n")
-    for keys in quizzes:
-        print(keys)
-
-
 def practice_quiz(quiz, user, points):
     n = 0 # point counter
+    repeat = {}
     for i in quiz:
         svar = input(f'\n{i} = ')
         rätt_svar = quiz[i]
@@ -39,15 +40,20 @@ def practice_quiz(quiz, user, points):
             n = n+1
         else:
             print(f"\nIncorrect! Answer: {rätt_svar}")
-            # här kan man lägga till fel svar i en lista som sen kan köras igen
+            repeat[i] = quiz[i]
     total_points = len(quiz)
     print(f"\nYour points this round: {n}/{total_points}") 
     points[user] = points[user] + n # lägger till samlade poäng i totala poäng
-    return points
+    new_try = input("\nRepeat wrong answers? y/n ")
+    if new_try == "y":
+        return points, repeat
+    else: 
+        return points, None
+
+# vill få orden att slumpas så att de inte alltid kommer i samma ordning
 
 
 def quiz_option(quizzes):
-    print("Your quizzes are: ")
     view_quizzes(quizzes)
     print("\nWrite the title of a new or existing quiz")
     title = input("\nTitle: ")
@@ -61,8 +67,8 @@ def create_quiz(quizzes, title):
         word = input("\nWord: ")
         answer = input("\nAnswer: ")
         quizzes[title][word] = answer
-        quit = input("\nFinished? y/n: ")
-        if quit == "y":
+        save = input("\nWrite s to save and quit: ")
+        if save == "s":
             break
     return quizzes
     
@@ -80,6 +86,7 @@ def login(user_pswrd):
         else:
             return user
 
+
 def create_account(user_d, user_p):
     print("\nNew user")
     n_user_name = input("Username: ")
@@ -93,24 +100,11 @@ def create_account(user_d, user_p):
 def leaderboard(user_points):
     p_sorted = sorted(user_points.items(), key = lambda x: x[1], reverse = True)
     n = 1
+    print("\n")
     for user, points in p_sorted:
         print("------------------")
         print(f"{n}) {user} {points} poäng")
         n = n + 1
-
-
-def save_data(users, quizzes, points):
-    data = [users, quizzes, points]
-    with open("FlashBook", 'w') as h:
-        json.dump(data, h)
-
-def open_data():
-    with open("FlashBook", "r") as file:
-        data = json.load(file)
-    users = data[0]
-    quizzes = data[1]
-    points = data[2]
-    return users, quizzes, points
 
 
 def user_actions(user, quizzes, points):
@@ -121,13 +115,33 @@ def user_actions(user, quizzes, points):
         if choice == "p":
             view_quizzes(quizzes)
             quiz = input("\nChoose quiz: ")
-            points = practice_quiz(quizzes[quiz], user, points)
-            leaderboard(points)
+            try:
+                points, repeat = practice_quiz(quizzes[quiz], user, points)
+                if type(repeat) == dict:
+                    points, repeat = practice_quiz(repeat, user, points)
+                leaderboard(points)
+            except KeyError:
+                 print("\nChoose existing quiz")
         elif choice == "c":
             title = quiz_option(quizzes)
             quizzes = create_quiz(quizzes, title)
         elif choice == "l":
             break
+
+
+def save_data(users, quizzes, points):
+    data = [users, quizzes, points]
+    with open("FlashBook", 'w') as h:
+        json.dump(data, h)
+
+
+def open_data():
+    with open("FlashBook", "r") as file:
+        data = json.load(file)
+    users = data[0]
+    quizzes = data[1]
+    points = data[2]
+    return users, quizzes, points
 
 
 def main():
@@ -145,6 +159,7 @@ def main():
         elif choice == "c":
             users, points = create_account(users, points)
             continue
+    print("Quitting and saving...")
     save_data(users, quizzes, points)
 
 
