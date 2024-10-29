@@ -1,6 +1,24 @@
-user_password = {"crispin":"dumtenta", "LarsÅke":"fbasmatte"} 
+#ändra PC - öva på fel
+#halva poäng
+
+import json
+
+user_password = {"sofia":"blomstrand", "tilda":"larsson"} 
 quiz_dict = {"spanska":{"hej":"hola", "gul":"amarillo"}, "engelska": {"blå": "blue", "grön":"green"}}
-user_points = {"crispin": 0, "LarsÅke": 0}
+user_points = {"sofia": 0, "tilda": 0}
+
+def save_data(users, quizzes, points):
+    data = [users, quizzes, points]
+    with open("FlashBook", 'w') as h:
+        json.dump(data, h)
+
+def open_data():
+    with open("FlashBook", "r") as file:
+        data = json.load(file)
+    users = data[0]
+    quizzes = data[1]
+    points = data[2]
+    return users, quizzes, points
 
 def splash():
     print("-----------------------------------\n")
@@ -12,44 +30,47 @@ def practice_quiz(quiz, user, points):
         svar = input(f'\n{i} = ')
         rätt_svar = quiz[i]
         if svar == rätt_svar:
-            print("Correct!")
+            print("\nCorrect!")
             n = n+1
         else:
-            print(f'Wrong answer! Correct answer: {rätt_svar}')
-    print(f"\nYour points this round: {n}") # vill lägga till av hur många poäng man kunde få
-    points[user] = points[user] + n
+            print(f"\nIncorrect! Answer: {rätt_svar}")
+            # här kan man lägga till fel svar i en lista som sen kan köras igen
+    total_points = len(quiz)
+    print(f"\nYour points this round: {n}/{total_points}") 
+    points[user] = points[user] + n # lägger till samlade poäng i totala poäng
     return points
 
 def create_quiz(quizzes, title):
     if title not in quizzes:
         quizzes[title] = {}
     while True:
-        word = input("Word: ")
-        answer = input("Answer: ")
+        word = input("\nWord: ")
+        answer = input("\nAnswer: ")
         quizzes[title][word] = answer
-        quit = input("Finished? y/n: ")
+        quit = input("\nFinished? y/n: ")
         if quit == "y":
             break
     return quizzes
     
 def quiz_option(quizzes):
-    print("Write the title of a new or existing quiz")
-    title = input("Title: ")
+    print("Your quizzes are: ")
+    view_quizzes(quizzes)
+    print("\nWrite the title of a new or existing quiz")
+    title = input("\nTitle: ")
     return title  
 
 def menu(x):
     if x == 1:
-        print("\nl) Login \nc) Create new account \nq) Quit ")
+        print("\nl) Login \nc) Create new account \nq) Quit")
     if x == 2:
-        print("\nr) Retry \nq) Quit \n")
+        print("\nr) Retry \nq) Quit")
     if x == 3:
-        print("\np) Practise flashcards \nc) Create new flashcards")
+        print("\np) Practise flashcards \nc) Create new flashcards \nl) Log out")
     choice = input("\nOption: ").lower()
     return choice
     
-
 def view_quizzes(quizzes):
-    print("\nThese are your quizzes:")
+    print("\nThese are your quizzes:\n")
     for keys in quizzes:
         print(keys)
 
@@ -57,9 +78,8 @@ def login(user_pswrd):
     while True:
         user = input("\nUsername: ")
         password = input("Password: ")
-        print(user_pswrd)
         if user not in user_pswrd or password != user_pswrd[user]:
-            print("\nFel lösenord")
+            print("\nWrong password or username")
             retry = menu(2)
             if retry == "q":
                 print("quitting.....")
@@ -73,26 +93,37 @@ def create_account(user_d, user_p):
     n_user_pswrd = input("Password: ")
     user_d[n_user_name] = n_user_pswrd
     user_p[n_user_name] = 0
-    print("ny dict", user_d)
+    #print("ny dict", user_d)
     return user_d, user_p
     
     
-def leaderboard():
-    pass
+def leaderboard(user_points):
+    p_sorted = sorted(user_points.items(), key = lambda x: x[1], reverse = True)
+    n = 1
+    for user, points in p_sorted:
+        print("------------------")
+        print(f"{n}) {user} {points} poäng")
+        n = n + 1
+
 
 def user_actions(user, quizzes, points):
-    print(f"\nWelcome {user}!")
+    print(f"\nWelcome {user}!\n")
+    leaderboard(points)
     while True:
         choice = menu(3)
         if choice == "p":
             view_quizzes(quizzes)
             quiz = input("\nChoose quiz: ")
             points = practice_quiz(quizzes[quiz], user, points)
+            leaderboard(points)
         elif choice == "c":
             title = quiz_option(quizzes)
             quizzes = create_quiz(quizzes, title)
- 
-def main(users, quizzes, points):
+        elif choice == "l":
+            break
+
+def main():
+    users, quizzes, points = open_data()
     splash()
     while True:
         choice = menu(1)
@@ -106,29 +137,6 @@ def main(users, quizzes, points):
         elif choice == "c":
             users, points = create_account(users, points)
             continue
+    save_data(users, quizzes, points)
 
-    #lägg till i quiz bweoende på title
-
-main(user_password, quiz_dict, user_points)
-
-#title = input("Title: ")
-#   if title in quiz_dict:
-#       
-#    else:
-#        quizzes[title] = {}
-
-#def add(quizzes, title):
-#        title = quiz_option(quiz_dict)
-#        choice = input("Vill du lägga till i befintiligt quiz? (y/n): ")
-#        if choice == "y":
-
-#       quiz_dict[title].append
-
-
-#view_quizzes(quiz_dict)
-#print(quizzes["spanska"]["gul"])
-
-
-
-#practice_quiz(quizzes["spanska"])
-#create_quiz(quiz_dict, user_password)
+main()
