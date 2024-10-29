@@ -9,14 +9,14 @@ def splash():
 def practice_quiz(quiz, user, points):
     n = 0 # point counter
     for i in quiz:
-        svar = input(f'{i} = ')
+        svar = input(f'\n{i} = ')
         rätt_svar = quiz[i]
         if svar == rätt_svar:
-            print("Correct answer!")
+            print("Correct!")
             n = n+1
         else:
             print(f'Wrong answer! Correct answer: {rätt_svar}')
-    print(f"Your points this round: {n}") # vill lägga till av hur många poäng man kunde få
+    print(f"\nYour points this round: {n}") # vill lägga till av hur många poäng man kunde få
     points[user] = points[user] + n
     return points
 
@@ -39,11 +39,11 @@ def quiz_option(quizzes):
 
 def menu(x):
     if x == 1:
-        print("\nl) Login \n c) Create new account \n q) Quit ")
+        print("\nl) Login \nc) Create new account \nq) Quit ")
     if x == 2:
-        print("\nr) Retry \n q) Quit \n")
+        print("\nr) Retry \nq) Quit \n")
     if x == 3:
-        print("\n p) Practise flashcards \n c) Create new flashcards")
+        print("\np) Practise flashcards \nc) Create new flashcards")
     choice = input("\nOption: ").lower()
     return choice
     
@@ -57,9 +57,10 @@ def login(user_pswrd):
     while True:
         user = input("\nUsername: ")
         password = input("Password: ")
+        print(user_pswrd)
         if user not in user_pswrd or password != user_pswrd[user]:
-            print("Fel lösenord")
-            retry=menu(2)
+            print("\nFel lösenord")
+            retry = menu(2)
             if retry == "q":
                 print("quitting.....")
                 return retry
@@ -67,8 +68,8 @@ def login(user_pswrd):
             return user
 
 def create_account(user_d, user_p):
-    print("New user")
-    n_user_name = input("\nUsername: ")
+    print("\nNew user")
+    n_user_name = input("Username: ")
     n_user_pswrd = input("Password: ")
     user_d[n_user_name] = n_user_pswrd
     user_p[n_user_name] = 0
@@ -103,7 +104,7 @@ def main(users, quizzes, points):
                 break
             user_actions(user, quizzes, points)
         elif choice == "c":
-            users = create_account(users, points)
+            users, points = create_account(users, points)
             continue
 
     #lägg till i quiz bweoende på title
