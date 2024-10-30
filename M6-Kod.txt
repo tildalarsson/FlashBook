@@ -1,6 +1,7 @@
 #ändra PC - öva på fel
 #ta bort användare - sofia
 #cooka på slumpa ordning
+#sofia
 
 import json
 
@@ -36,7 +37,7 @@ def practice_quiz(quiz, user, points):
     for i in quiz:
         svar = input(f'\n{i} = ')
         rätt_svar = quiz[i]
-        if svar == rätt_svar:
+        if svar == rätt_svar: #Engelska? :)
             print("\nCorrect!")
             n = n+1
         else:
@@ -53,6 +54,9 @@ def practice_quiz(quiz, user, points):
 
 # vill få orden att slumpas så att de inte alltid kommer i samma ordning
 
+def random_order(quiz, user, points):
+
+    pass
 
 def quiz_option(quizzes):
     view_quizzes(quizzes)
@@ -99,17 +103,17 @@ def create_account(user_d, user_p):
 
 
 def remove_account(user, user_pswrd, user_p):
-    print("\nRemove account")
     remove = input("Do you want to remove the account y/n: ")
     if remove == "y":
-        user_pswrd.pop(user)
-        user_p.pop(user)
-        print("The account has been removed")
+        if user in user_pswrd:
+            user_pswrd.pop(user)
+            user_p.pop(user)
+            print("The account has been removed")
+        else:
+            print("Account not found")
     else:
-        print("Account not found")
+        ("Account not removed")
         return user_p, user_pswrd
-
-
 
 
 
@@ -142,7 +146,8 @@ def user_actions(user, quizzes, points, user_pswrd):
             title = quiz_option(quizzes)
             quizzes = create_quiz(quizzes, title)
         elif choice == "d":
-            points, user_pswrd = remove_account(user, user_pswrd, points)
+            user_pswrd = remove_account(user, user_pswrd, points)
+            #points, user_pswrd = remove_account(user, user_pswrd, points)
         elif choice == "l":
             break
 
