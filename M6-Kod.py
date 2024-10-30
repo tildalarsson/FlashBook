@@ -116,7 +116,8 @@ def remove_words(quizzes):
             while True:
                 word = input("\nWhich word do you want to remove? ")
                 if word in quizzes[title]:
-                    del quizzes[title][word] #ta bort ordet som finns nästlat i dictionary
+                    quizzes[title].pop(word) #ta bort ordet som finns nästlat i dictionary
+                    #del quizzes[title][word] 
                     print(f"\nThe word {word} has been removed from {title}")
                 else:
                     print(f"\nThe word {word} has not been removed from {title}")
