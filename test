@@ -19,7 +19,7 @@ def menu(x):
     if x == 2:
         print("\nr) Retry \nq) Quit")
     if x == 3:
-        print("\np) Practice flashcards \nc) Create new flashcards \nr) Remove flashcards\nl) Log out \nd) Delete account")
+        print("\np) Practice flashcards \nc) Create new flashcards \nl) Log out \nd) Delete account \nm) Modify quiz")
     choice = input("\nOption: ").lower()
     return choice
 
@@ -73,11 +73,11 @@ def create_quiz(quizzes, title):
     return quizzes
     
 
-def login(users):
+def login(user_pswrd):
     while True:
         user = input("\nUsername: ")
         password = input("Password: ")
-        if user not in users or password != users[user]:
+        if user not in user_pswrd or password != user_pswrd[user]:
             print("\nWrong password or username")
             retry = menu(2)
             if retry == "q":
@@ -90,43 +90,38 @@ def login(users):
 def create_account(users, points): #user_d 
     print("\nNew user")
     new_user = input("Username: ")
-    new_user_pswrd = input("Password: ")
-    users[new_user] = new_user_pswrd
+    n_user_pswrd = input("Password: ")
+    users[new_user] = n_user_pswrd
     points[new_user] = 0
     return users, points
 
 
-def remove_account(user, users, points):
+def remove_account(user, user_pswrd, points):
     print("\nRemove account")
     remove_accnt = input("Do you want to remove the account y/n: ")
     if remove_accnt == "y":
-        users.pop(user)
+        user_pswrd.pop(user)
         points.pop(user)
         print("\nThe account has been removed")
     else:
         print("\nAccount has not been removed")
-        return points, users
+        return points, user_pswrd
 
 
 def remove_words(quizzes):
-    remove_wrds = input("Do you want to remove a word? y/n: ")
+    remove_wrds=input("Do you want to remove a word? y/n: ")
     if remove_wrds == "y":
         view_quizzes(quizzes)
-        title = input("\nWhich quiz do you want to remove from? (title): ")
-        if title in quizzes:
+        quiz_title=input("Which quiz do you want to remove from? (title): ")
+        if quiz_title in quizzes:
             while True:
-                word = input("\nWhich word do you want to remove? ")
-                if word in quizzes[title]:
-                    del quizzes[title][word]
-                    print(f"The word {word} has been removed from {title}")
-                else:
-                    print(f"The word {word} has not been removed from {title}")
-                save = input("\nWrite s to save and quit: ")
-                if save == "s":
-                    break
-        else:
-            print(f"The quiz {title} does not exist")
-    return quizzes
+                word=("Which word do you want to remove? ")
+                if word in quizzes[quiz_title]:
+                    del quizzes[quiz_title][word]
+                    print(f"The word {word} has been removed from {quiz_title}")
+                    save = input("\nWrite s to save and quit: ")
+                    if save == "s":
+                        break
 
 
 
@@ -141,7 +136,7 @@ def leaderboard(points):
     print("------------------")
 
 
-def user_actions(user, quizzes, points, users):
+def user_actions(user, quizzes, points, user_pswrd):
     print(f"\nWelcome {user}!\n")
     leaderboard(points)
     while True:
@@ -159,10 +154,11 @@ def user_actions(user, quizzes, points, users):
         elif choice == "c":
             title = quiz_option(quizzes)
             quizzes = create_quiz(quizzes, title)
-        elif choice == "r":
-            remove_words(quizzes)
         elif choice == "d":
-            points, users = remove_account(user, users, points) 
+            points, user_pswrd = remove_account(user, user_pswrd, points)
+        elif choice == "m":
+            quizzes = remove_words(quizzes) 
+            pass
         elif choice == "l":
             break
 
