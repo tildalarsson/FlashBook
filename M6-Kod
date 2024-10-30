@@ -2,6 +2,7 @@
 #ta bort användare - sofia
 #cooka på slumpa ordning
 
+import random
 import json
 
 #user_password = {"sofia":"blomstrand", "tilda":"larsson"} 
@@ -25,7 +26,7 @@ def menu(x):
     if x == 2:
         print("\nr) Retry \nq) Quit")
     if x == 3:
-        print("\np) Practice flashcards \nc) Create new flashcards \nl) Log out, \nd) Delete account")
+        print("\np) Practice flashcards \nc) Create new flashcards \nl) Log out \nd) Delete account")
     choice = input("\nOption: ").lower()
     return choice
 
@@ -33,7 +34,8 @@ def menu(x):
 def practice_quiz(quiz, user, points):
     n = 0 # point counter
     repeat = {}
-    for i in quiz:
+    shufflad = shuffle_quiz(quiz)
+    for i in shufflad:
         svar = input(f'\n{i} = ')
         rätt_svar = quiz[i]
         if svar == rätt_svar:
@@ -51,8 +53,10 @@ def practice_quiz(quiz, user, points):
     else: 
         return points, None
 
-# vill få orden att slumpas så att de inte alltid kommer i samma ordning
-
+def shuffle_quiz(quizzes):
+    keys = list(quizzes.keys())
+    random.shuffle(keys)
+    return keys
 
 def quiz_option(quizzes):
     view_quizzes(quizzes)
@@ -104,12 +108,10 @@ def remove_account(user, user_pswrd, user_p):
     if remove == "y":
         user_pswrd.pop(user)
         user_p.pop(user)
-        print("The account has been removed")
+        print("\nThe account has been removed")
     else:
-        print("Account not found")
+        print("\nAccount has not been removed")
         return user_p, user_pswrd
-
-
 
 
 
@@ -121,6 +123,7 @@ def leaderboard(user_points):
         print("------------------")
         print(f"{n}) {user} {points} p")
         n = n + 1
+    print("------------------")
 
 
 def user_actions(user, quizzes, points, user_pswrd):
