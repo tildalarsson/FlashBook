@@ -3,6 +3,7 @@
 #cooka på slumpa ordning
 #sofia
 
+import random
 import json
 
 #user_password = {"sofia":"blomstrand", "tilda":"larsson"} 
@@ -37,7 +38,7 @@ def practice_quiz(quiz, user, points):
     for i in quiz:
         svar = input(f'\n{i} = ')
         rätt_svar = quiz[i]
-        if svar == rätt_svar: #Engelska? :)
+        if svar == rätt_svar: #Engelska variabler? 
             print("\nCorrect!")
             n = n+1
         else:
@@ -54,9 +55,13 @@ def practice_quiz(quiz, user, points):
 
 # vill få orden att slumpas så att de inte alltid kommer i samma ordning
 
-def random_order(quiz, user, points):
-
+def random_order(quizzes):
+    for keys in quizzes:
+        keys = list(quizzes.keys())
+        random.shuffle(keys)
+        return keys
     pass
+    
 
 def quiz_option(quizzes):
     view_quizzes(quizzes)
@@ -125,7 +130,7 @@ def leaderboard(user_points):
         print("------------------")
         print(f"{n}) {user} {points} p")
         n = n + 1
-
+    print("------------------")
 
 def user_actions(user, quizzes, points, user_pswrd):
     print(f"\nWelcome {user}!\n")
